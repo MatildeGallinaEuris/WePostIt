@@ -26,7 +26,7 @@ namespace WePostIt.API.Repositories
             context.Messages.Add(newMessage);
             context.SaveChanges();
 
-            return GetById(newMessage.Id);
+            return GetById(newMessage.Id ?? 0);
         }
 
         public bool Delete(int id)
