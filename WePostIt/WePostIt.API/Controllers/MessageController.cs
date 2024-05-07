@@ -21,6 +21,13 @@ namespace WePostIt.API.Controllers
     [Route("[controller]")]
     public class MessageController : ControllerBase
     {
+        private readonly ILogger<MessageController> logger;
+
+        public MessageController(ILogger<MessageController> logger)
+        {
+            this.logger = logger;
+        }
+
         /* posso definire piú di una rotta che punta alla stessa action 
          * es. [Route("[action]")] -> // https://localhost:7073/message/GetAllAsync
          * es. [Route("all")] -> // https://localhost:7073/message/all
@@ -42,7 +49,7 @@ namespace WePostIt.API.Controllers
             {
                 string logMessage = $"Error getting messages";
                 
-                Log(logMessage, exc);
+                LogError(logMessage, exc);
                 
                 return Problem(
                     statusCode: (int)HttpStatusCode.InternalServerError,
@@ -96,7 +103,7 @@ namespace WePostIt.API.Controllers
             {
                 string logMessage = $"Error getting message - ID {id}";
                 
-                Log(logMessage, exc);
+                LogError(logMessage, exc);
                 
                 return Problem(
                     statusCode: (int)HttpStatusCode.InternalServerError,
@@ -119,7 +126,7 @@ namespace WePostIt.API.Controllers
             if (!ModelState.IsValid)
             {
                 string json = JsonConvert.SerializeObject(createMessageDTO, Formatting.Indented);
-                Log($"Error creating message - invalid model state: {json}");
+                LogError($"Error creating message - invalid model state: {json}");
 
                 return BadRequest(ModelState);
             }
@@ -131,7 +138,7 @@ namespace WePostIt.API.Controllers
             catch(Exception exc)
             {
                 string logMessage = "Error creating new message";
-                Log(logMessage, exc);
+                LogError(logMessage, exc);
 
                 return Problem(
                     statusCode: (int)HttpStatusCode.InternalServerError,
@@ -154,9 +161,9 @@ namespace WePostIt.API.Controllers
             throw new NotImplementedException();
         }
 
-        private void Log(string message, Exception? exc = null)
+        private void LogError(string message, Exception? exc = null)
         {
-            // todo
+            logger.LogError(message, exc);
         }
     }
 }
