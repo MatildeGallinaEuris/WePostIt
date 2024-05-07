@@ -54,7 +54,7 @@ namespace WePostIt.API.Controllers
         {
             try
             {
-                IEnumerable<Message> messages = repository.GetAll();
+                IEnumerable<Message> messages = await repository.GetAll();
                 return Ok(messages);
             }
             catch (Exception exc) 
@@ -109,7 +109,7 @@ namespace WePostIt.API.Controllers
         {
             try
             {
-                Message? message = repository.GetById(id);
+                Message? message = await repository.GetById(id);
                 
                 // if (message.AuthorId != current user id)
                 //     return Unauthorized();
@@ -158,7 +158,7 @@ namespace WePostIt.API.Controllers
 
             try
             {
-                Message? created = repository.Create(createMessageDTO);
+                Message? created = await repository.Create(createMessageDTO);
                 if (created is null)
                     return BadRequest();
 
@@ -185,7 +185,7 @@ namespace WePostIt.API.Controllers
         {
             try
             {
-                Message? updated = repository.Update(id, updateMessageDTO);
+                Message? updated = await repository.Update(id, updateMessageDTO);
                 
                 return updated is not null
                     ? Ok(updated)
@@ -209,7 +209,7 @@ namespace WePostIt.API.Controllers
         {
             try
             {
-                bool deleted = repository.Delete(id);
+                bool deleted = await repository.Delete(id);
                 
                 return deleted 
                     ? Ok(id) 

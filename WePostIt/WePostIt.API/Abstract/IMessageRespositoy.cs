@@ -5,11 +5,11 @@ namespace WePostIt.API.Abstract
 {
     public interface IMessageRespositoy
     {
-        IEnumerable<Message> GetAll();
-        Message? GetById(int id);
-        Message? Create(CreateMessageDTO message);
-        Message? Update(int id, UpdateMessageDTO message);
-        bool Delete(int id);
-        bool SoftDelete(int id);
+        Task<IEnumerable<Message>> GetAll();
+        Task<Message?> GetById(int id);
+        Task<Message?> Create(CreateMessageDTO message);
+        Task<Message?> Update(int id, UpdateMessageDTO message);
+        Task<bool> Delete(int id);
+        Task<bool> SoftDelete(int id);
     }
 }

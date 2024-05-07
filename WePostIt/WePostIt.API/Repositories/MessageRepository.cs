@@ -1,4 +1,5 @@
-﻿using WePostIt.API.Abstract;
+﻿using Microsoft.EntityFrameworkCore;
+using WePostIt.API.Abstract;
 using WePostIt.API.Data;
 using WePostIt.API.Domain;
 using WePostIt.API.DTOs;
@@ -14,24 +15,23 @@ namespace WePostIt.API.Repositories
             this.context = context;
         }
 
-        public Message? Create(CreateMessageDTO message)
+        public async Task<Message?> Create(CreateMessageDTO message)
         {
             Message newMessage = new Message
             {
                 Text = message.Text,
-                AuthorId = message.AuthorId,
-                IdDeleted = false
+                AuthorId = message.AuthorId
             };
 
             context.Messages.Add(newMessage);
             context.SaveChanges();
 
-            return GetById(newMessage.Id ?? 0);
+            return await GetById(newMessage.Id ?? 0);
         }
 
-        public bool Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            Message? message = GetById(id);
+            Message? message = await GetById(id);
             
             bool founded = message is not null;
             if (founded)
@@ -42,12 +42,14 @@ namespace WePostIt.API.Repositories
             return founded;
         }
 
-        public bool SoftDelete(int id)
+        public async Task<bool> SoftDelete(int id)
         {
-            Message? toUpdate = GetById(id);
+            Message? toUpdate = await GetById(id);
             if (toUpdate is not null)
             {
-                toUpdate.IdDeleted = true;
+                toUpdate.IsDeleted = true;
+                toUpdate.UpdateTime = DateTime.Now;
+
                 context.Messages.Update(toUpdate);
                 context.SaveChanges();
             }
@@ -55,29 +57,32 @@ namespace WePostIt.API.Repositories
             return toUpdate is not null;
         }
 
-        public IEnumerable<Message> GetAll()
+        public async Task<IEnumerable<Message>> GetAll()
         {
-            return context.Messages.Where(message => !message.IdDeleted);
+            return await context.Messages
+                .Where(message => !message.IsDeleted)
+                .ToListAsync();
         }
 
-        public Message? GetById(int id)
+        public async Task<Message?> GetById(int id)
         {
-            return context.Messages.FirstOrDefault(
-                message => 
-                message.Id == id && !message.IdDeleted);
+            return await context.Messages.FirstOrDefaultAsync(
+                message => message.Id == id && !message.IsDeleted);
         }
 
-        public Message? Update(int id, UpdateMessageDTO message)
+        public async Task<Message?> Update(int id, UpdateMessageDTO message)
         {
-            Message? toUpdate = GetById(id);
+            Message? toUpdate = await GetById(id);
             if (toUpdate is not null)
             {
                 toUpdate.Text = message.Text;
+                toUpdate.UpdateTime = DateTime.Now;
+
                 context.Messages.Update(toUpdate);
                 context.SaveChanges();
             }
 
-            return GetById(id);
+            return await GetById(id);
         }
     }
 }
