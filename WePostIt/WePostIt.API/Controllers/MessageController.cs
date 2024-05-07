@@ -11,6 +11,11 @@ namespace WePostIt.API.Controllers
      * I controllers decorati con questo attributo sono trattati come 
      * controllers con comportamento API.
      * href="https://learn.microsoft.com/aspnet/core/web-api/#apicontroller-attribute"
+     * 
+     * un vantaggio dell'ApiController è che convalida in automatico il 
+     * ModelState e agisce di conseguenza: 
+     * se il ModelState non si trova in uno stato valido restituire una 
+     * risposta HTTP 400 automatica (BadRequest)
      */
     [ApiController]
     /* RouteAttribute:
@@ -137,13 +142,19 @@ namespace WePostIt.API.Controllers
         public async Task<IActionResult> CreateAsync(
             [FromBody] CreateMessageDTO createMessageDTO)
         {
-            if (!ModelState.IsValid)
-            {
-                string json = JsonConvert.SerializeObject(createMessageDTO, Formatting.Indented);
-                LogError($"Error creating message - invalid model state: {json}");
-
-                return BadRequest(ModelState);
-            }
+            /* essendo il controller un ApiController questo controllo
+             * manual sullo stato del ModelState è inutile, la gestione 
+             * del ModelState è automatica -> ModelState.IsValid sarà 
+             * sempre true
+             * 
+             *  if (!ModelState.IsValid)
+             *  {
+             *      string json = JsonConvert.SerializeObject(createMessageDTO, Formatting.Indented);
+             *      LogError($"Error creating message - invalid model state: {json}");
+             *      
+             *      return BadRequest(ModelState);
+             *  }
+             */
 
             try
             {
