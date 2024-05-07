@@ -1,4 +1,5 @@
 ﻿using WePostIt.API.Abstract;
+using WePostIt.API.Data;
 using WePostIt.API.Domain;
 using WePostIt.API.DTOs;
 
@@ -6,29 +7,77 @@ namespace WePostIt.API.Repositories
 {
     public class MessageRepository : IMessageRespositoy
     {
+        private readonly WePostIdDbContext context;
+
+        public MessageRepository(WePostIdDbContext context)
+        {
+            this.context = context;
+        }
+
         public Message? Create(CreateMessageDTO message)
         {
-            throw new NotImplementedException();
+            Message newMessage = new Message
+            {
+                Text = message.Text,
+                AuthorId = message.AuthorId,
+                IdDeleted = false
+            };
+
+            context.Messages.Add(newMessage);
+            context.SaveChanges();
+
+            return GetById(newMessage.Id);
         }
 
         public bool Delete(int id)
         {
-            throw new NotImplementedException();
+            Message? message = GetById(id);
+            
+            bool founded = message is not null;
+            if (founded)
+            {
+                context.Messages.Remove(message!);
+                context.SaveChanges();
+            }
+            return founded;
+        }
+
+        public bool SoftDelete(int id)
+        {
+            Message? toUpdate = GetById(id);
+            if (toUpdate is not null)
+            {
+                toUpdate.IdDeleted = true;
+                context.Messages.Update(toUpdate);
+                context.SaveChanges();
+            }
+
+            return toUpdate is not null;
         }
 
         public IEnumerable<Message> GetAll()
         {
-            throw new NotImplementedException();
+            return context.Messages.Where(message => !message.IdDeleted);;
         }
 
         public Message? GetById(int id)
         {
-            throw new NotImplementedException();
+            return context.Messages.FirstOrDefault(
+                message => 
+                message.Id == id && !message.IdDeleted);
         }
 
         public Message? Update(int id, UpdateMessageDTO message)
         {
-            throw new NotImplementedException();
+            Message? toUpdate = GetById(id);
+            if (toUpdate is not null)
+            {
+                toUpdate.Text = message.Text;
+                context.Messages.Update(toUpdate);
+                context.SaveChanges();
+            }
+
+            return GetById(id);
         }
     }
 }
