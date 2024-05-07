@@ -151,14 +151,40 @@ namespace WePostIt.API.Controllers
         [Route("update")]
         public async Task<IActionResult> UpdateAsync()
         {
-            throw new NotImplementedException();
+            try
+            {
+                throw new NotImplementedException ();
+            }
+            catch (Exception exc)
+            {
+                string logMessage = "Error updating message";
+                LogError(logMessage, exc);
+
+                return Problem(
+                    statusCode: (int)HttpStatusCode.InternalServerError,
+                    title: logMessage,
+                    detail: exc.Message);
+            }
         }
 
         [HttpDelete]
         [Route("delete")]
         public async Task<IActionResult> DeleteAsync()
         {
-            throw new NotImplementedException();
+            try
+            {
+                throw new NotImplementedException();
+            }
+            catch (Exception exc)
+            {
+                string logMessage = "Error deleting message";
+                LogError(logMessage, exc);
+
+                return Problem(
+                    statusCode: (int)HttpStatusCode.InternalServerError,
+                    title: logMessage,
+                    detail: exc.Message);
+            }
         }
 
         private void LogError(string message, Exception? exc = null)
