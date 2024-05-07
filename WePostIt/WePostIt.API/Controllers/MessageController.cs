@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net;
+using WePostIt.API.Abstract;
+using WePostIt.API.Domain;
 using WePostIt.API.DTOs;
 
 namespace WePostIt.API.Controllers
@@ -22,10 +24,14 @@ namespace WePostIt.API.Controllers
     public class MessageController : ControllerBase
     {
         private readonly ILogger<MessageController> logger;
+        private readonly IMessageRespositoy repository;
 
-        public MessageController(ILogger<MessageController> logger)
+        public MessageController(
+            ILogger<MessageController> logger,
+            IMessageRespositoy respository)
         {
             this.logger = logger;
+            this.repository = respository;
         }
 
         /* posso definire piú di una rotta che punta alla stessa action 
@@ -43,7 +49,8 @@ namespace WePostIt.API.Controllers
         {
             try
             {
-                throw new NotImplementedException();
+                IEnumerable<Message> messages = repository.GetAll();
+                return Ok(messages);
             }
             catch (Exception exc) 
             {
@@ -97,7 +104,14 @@ namespace WePostIt.API.Controllers
         {
             try
             {
-                throw new NotImplementedException();
+                Message? message = repository.GetById(id);
+                
+                // if (message.AuthorId != current user id)
+                //     return Unauthorized();
+                
+                return message is not null
+                    ? Ok(message)
+                    : NotFound();
             }
             catch(Exception exc)
             {
@@ -113,7 +127,7 @@ namespace WePostIt.API.Controllers
         }
 
         [HttpPost]
-        [Route("create")]
+        [Route("")]
         /* ConsumesAttribute:
          * definisce i content-type accettati nel body della richiesta.
          * es. [Consumes("application/json")] avrebbe accettato solo json
@@ -133,7 +147,12 @@ namespace WePostIt.API.Controllers
 
             try
             {
-                throw new NotImplementedException();
+                Message? created = repository.Create(createMessageDTO);
+                if (created is null)
+                    return BadRequest();
+
+                string url = $"{Request.Scheme}://{Request.Host}{Request.Path}/{created.Id}";
+                return Created(url, created);
             }
             catch(Exception exc)
             {
@@ -155,7 +174,11 @@ namespace WePostIt.API.Controllers
         {
             try
             {
-                throw new NotImplementedException ();
+                Message? updated = repository.Update(id, updateMessageDTO);
+                
+                return updated is not null
+                    ? Ok(updated)
+                    : NotFound();
             }
             catch (Exception exc)
             {
@@ -175,7 +198,11 @@ namespace WePostIt.API.Controllers
         {
             try
             {
-                throw new NotImplementedException();
+                bool deleted = repository.Delete(id);
+                
+                return deleted 
+                    ? Ok(id) 
+                    : NotFound();
             }
             catch (Exception exc)
             {

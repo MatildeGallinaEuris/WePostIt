@@ -1,3 +1,6 @@
+using WePostIt.API.Abstract;
+using WePostIt.API.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Logging.ClearProviders();
@@ -9,6 +12,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IMessageRespositoy, MessageRepository>();
 
 var app = builder.Build();
 
