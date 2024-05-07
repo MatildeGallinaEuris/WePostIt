@@ -19,7 +19,7 @@ namespace WePostIt.API.Repositories
             };
 
             context.Messages.Add(newMessage);
-            context.SaveChanges();
+            await context.SaveChangesAsync();
 
             return await GetById(newMessage.Id ?? 0);
         }
@@ -32,7 +32,7 @@ namespace WePostIt.API.Repositories
             if (founded)
             {
                 context.Messages.Remove(message!);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
             return founded;
         }
@@ -46,7 +46,7 @@ namespace WePostIt.API.Repositories
                 toUpdate.UpdateTime = DateTime.Now;
 
                 context.Messages.Update(toUpdate);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
 
             return toUpdate is not null;
@@ -74,7 +74,7 @@ namespace WePostIt.API.Repositories
                 toUpdate.UpdateTime = DateTime.Now;
 
                 context.Messages.Update(toUpdate);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
 
             return await GetById(id);

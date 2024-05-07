@@ -59,7 +59,7 @@ namespace WePostIt.API.Repositories
                 toUpdate.UpdateTime = DateTime.Now;
 
                 context.Authors.Update(toUpdate);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
 
             return await GetById(id);
