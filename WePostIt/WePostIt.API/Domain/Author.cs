@@ -10,11 +10,15 @@
         int? id,
         string name = "",
         string surname = "",
-        string? email = "",
+        string email = "",
         DateTime? creationTime = null,
         DateTime? updateTime = null)
             : base(id, creationTime, updateTime) 
-        { }
+        { 
+            Name = name; 
+            Surname = surname;
+            Email = email;
+        }
 
         public Author()
             : this(
