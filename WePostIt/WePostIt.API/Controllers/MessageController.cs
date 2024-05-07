@@ -229,7 +229,8 @@ namespace WePostIt.API.Controllers
 
         private void LogError(string message, Exception? exc = null)
         {
-            logger.LogError(message, exc);
+            if (exc is null) logger.LogError(message);
+            else logger.LogError(exc, message);
         }
     }
 }
