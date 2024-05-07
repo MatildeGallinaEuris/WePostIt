@@ -57,7 +57,7 @@ namespace WePostIt.API.Repositories
 
         public IEnumerable<Message> GetAll()
         {
-            return context.Messages.Where(message => !message.IdDeleted);;
+            return context.Messages.Where(message => !message.IdDeleted);
         }
 
         public Message? GetById(int id)
