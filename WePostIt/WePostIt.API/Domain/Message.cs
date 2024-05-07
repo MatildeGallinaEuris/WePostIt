@@ -1,14 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace WePostIt.API.Domain
+﻿namespace WePostIt.API.Domain
 {
-    public class Message
+    public class Message : EntityBase, ISoftDeleteEntity
     {
-        public int Id { get; set; }
         public string Text { get; set; } = string.Empty;
         public int AuthorId { get; set; }
-        public DateTime? CreationTime { get; set; }
-        public DateTime? UpdateTime { get; set; }
         public bool IdDeleted { get; set; }
     }
 }
