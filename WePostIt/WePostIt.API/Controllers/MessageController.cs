@@ -148,8 +148,10 @@ namespace WePostIt.API.Controllers
         }
 
         [HttpPut]
-        [Route("update")]
-        public async Task<IActionResult> UpdateAsync()
+        [Route("update/{id:int}")]
+        public async Task<IActionResult> UpdateAsync(
+            [FromBody] UpdateMessageDTO updateMessageDTO, 
+            int id)
         {
             try
             {
@@ -169,7 +171,7 @@ namespace WePostIt.API.Controllers
 
         [HttpDelete]
         [Route("delete")]
-        public async Task<IActionResult> DeleteAsync()
+        public async Task<IActionResult> DeleteAsync(int id)
         {
             try
             {
