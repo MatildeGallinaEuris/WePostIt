@@ -1,19 +1,12 @@
 ﻿namespace WePostIt.API.Domain
 {
-    public abstract class EntityBase
+    public abstract class EntityBase(
+        int? id = default,
+        DateTime? creationTime = null,
+        DateTime? updateTime = null)
     {
-        public int? Id { get; set; }
-        public DateTime? CreationTime { get; set; }
-        public DateTime? UpdateTime { get; set; }
-
-        public EntityBase(
-            int? id = default,
-            DateTime? creationTime = null,
-            DateTime? updateTime = null)
-        {
-            Id = id;
-            CreationTime = creationTime;
-            UpdateTime = updateTime;
-        }
+        public int? Id { get; set; } = id;
+        public DateTime? CreationTime { get; set; } = creationTime;
+        public DateTime? UpdateTime { get; set; } = updateTime;
     }
 }

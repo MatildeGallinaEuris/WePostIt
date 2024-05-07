@@ -7,18 +7,13 @@ using WePostIt.API.DTOs;
 namespace WePostIt.API.Controllers
 {
     [Route("[controller]")]
-    public class AuthorController : ControllerBase
-    {
-        private readonly ILogger<AuthorController> logger;
-        private readonly IAuthorRepository repository;
-
-        public AuthorController(
+    public class AuthorController(
             ILogger<AuthorController> logger,
-            IAuthorRepository repository)
-        {
-            this.logger = logger;
-            this.repository = repository;
-        }
+            IAuthorRepository repository) 
+        : ControllerBase
+    {
+        private readonly ILogger<AuthorController> logger = logger;
+        private readonly IAuthorRepository repository = repository;
 
         [HttpGet]
         [Route("all")]

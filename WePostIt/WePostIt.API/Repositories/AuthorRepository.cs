@@ -6,18 +6,13 @@ using WePostIt.API.DTOs;
 
 namespace WePostIt.API.Repositories
 {
-    public class AuthorRepository : IAuthorRepository
+    public class AuthorRepository(WePostIdDbContext context) : IAuthorRepository
     {
-        private readonly WePostIdDbContext context;
-
-        public AuthorRepository(WePostIdDbContext context)
-        {
-            this.context = context;
-        }
+        private readonly WePostIdDbContext context = context;
 
         public async Task<Author?> Create(CreateAuthorDTO author)
         {
-            Author newAuthor = new Author
+            Author newAuthor = new()
             {
                 Name = author.Name,
                 Surname = author.Surname,
@@ -61,7 +56,8 @@ namespace WePostIt.API.Repositories
             {
                 toUpdate.Name = updateDTO.Name;
                 toUpdate.Surname = updateDTO.Surname;
-                toUpdate.UpdateTime= DateTime.Now;
+                toUpdate.UpdateTime = DateTime.Now;
+
                 context.Authors.Update(toUpdate);
                 context.SaveChanges();
             }

@@ -4,14 +4,11 @@ using WePostIt.API.Domain;
 
 namespace WePostIt.API.Data
 {
-    public class WePostIdDbContext : DbContext
+    public class WePostIdDbContext(DbContextOptions options) 
+        : DbContext(options)
     {
         public DbSet<Message> Messages { get; set; } = null!;
         public DbSet<Author> Authors { get; set; } = null!;
-
-        public WePostIdDbContext(DbContextOptions options)
-            : base(options) 
-        { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

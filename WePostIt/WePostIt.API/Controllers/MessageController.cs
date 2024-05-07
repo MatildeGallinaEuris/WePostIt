@@ -26,18 +26,13 @@ namespace WePostIt.API.Controllers
      *      https://localhost:7073/your-messages/...
      */
     [Route("[controller]")]
-    public class MessageController : ControllerBase
-    {
-        private readonly ILogger<MessageController> logger;
-        private readonly IMessageRespositoy repository;
-
-        public MessageController(
+    public class MessageController(
             ILogger<MessageController> logger,
-            IMessageRespositoy respository)
-        {
-            this.logger = logger;
-            this.repository = respository;
-        }
+            IMessageRespositoy respository) 
+        : ControllerBase
+    {
+        private readonly ILogger<MessageController> logger = logger;
+        private readonly IMessageRespositoy repository = respository;
 
         /* posso definire piú di una rotta che punta alla stessa action 
          * es. [Route("[action]")] -> // https://localhost:7073/message/GetAllAsync

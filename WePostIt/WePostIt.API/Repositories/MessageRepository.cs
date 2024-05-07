@@ -6,18 +6,13 @@ using WePostIt.API.DTOs;
 
 namespace WePostIt.API.Repositories
 {
-    public class MessageRepository : IMessageRespositoy
+    public class MessageRepository(WePostIdDbContext context) : IMessageRespositoy
     {
-        private readonly WePostIdDbContext context;
-
-        public MessageRepository(WePostIdDbContext context)
-        {
-            this.context = context;
-        }
+        private readonly WePostIdDbContext context = context;
 
         public async Task<Message?> Create(CreateMessageDTO message)
         {
-            Message newMessage = new Message
+            Message newMessage = new()
             {
                 Text = message.Text,
                 AuthorId = message.AuthorId
