@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WePostIt.API.Data;
 
@@ -11,9 +12,11 @@ using WePostIt.API.Data;
 namespace WePostIt.API.Migrations
 {
     [DbContext(typeof(WePostIdDbContext))]
-    partial class WePostIdDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240507102355_Default_MessageUpdateTime")]
+    partial class Default_MessageUpdateTime
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
