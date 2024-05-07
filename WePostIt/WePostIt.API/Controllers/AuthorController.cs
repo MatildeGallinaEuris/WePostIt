@@ -14,7 +14,7 @@ namespace WePostIt.API.Controllers
 
         public AuthorController(
             ILogger<AuthorController> logger,
-            IAuthorRepository repository )
+            IAuthorRepository repository)
         {
             this.logger = logger;
             this.repository = repository;
